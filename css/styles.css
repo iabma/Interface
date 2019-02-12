@@ -1,0 +1,104 @@
+body {
+  background-color: #ececec;
+  font-family: 'Roboto';
+  font-size: 16px;
+  -webkit-user-select: none;
+  padding: 0px;
+  margin: 0px;
+}
+#template-search {
+  outline: none;
+  background-color: white;
+  width: 50%;
+  height: 30px;
+  margin: 15px 25%;
+  margin-bottom: 0px;
+  text-align: center;
+  border-width: 0px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+#suggestions {
+  z-index: 2;
+  position: absolute;
+  outline: none;
+  width: 50%;
+  margin: 15px 25%;
+  margin-top: 0px;
+  border-radius: 5px;
+}
+#suggestions .suggested-template {
+  line-height: 16px;
+  width: fit-content;
+  text-align: center;
+  border-radius: 5px;
+  background-color: #414141;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+  margin: auto;
+  margin-top: 5px;
+  color: white;
+  padding: 12px 12px;
+  display: block;
+}
+#template {
+  background-color: gainsboro;
+  border-radius: 5px;
+  line-height: 30px;
+  margin: 15px;
+  padding: 10px;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown .dropbtn {
+  outline: none;
+  background-color: #414141;
+  color: white;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+.dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: transparent;
+  border-radius: 5px;
+  z-index: 1;
+}
+.dropdown .dropdown-content div {
+  line-height: 16px;
+  width: fit-content;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+  margin: 5px 0px;
+  color: black;
+  padding: 12px 12px;
+  display: block;
+}
+.dropdown .dropdown-content div:hover {
+  background-color: #414141;
+  color: white;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+.dropdown:hover .dropbtn {
+  background-color: #e47169;
+}
+#results {
+  background-color: gainsboro;
+  margin: 15px;
+  border-radius: 5px;
+  overflow: scroll;
+}
+#results .result {
+  background-color: #ececec;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>demo</title>
+    <!-- Materialize -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css" rel="stylesheet"> -->
+
+    <!-- D3 -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <link rel="stylesheet" href="../css/fonts.css" />
+    <!-- <link rel="stylesheet/less" type="text/css" href="styles.less" /> -->
+    <link rel="stylesheet" href="../css/styles.css" />
+    <!-- <script src="https://d3js.org/d3.v4.min.js"></script>
+            <script src="../js/less.js"></script>
+            <script src="../js/jquery.textfill.min.js"></script> -->
+</head>
+
+<body>
+    <input id="template-search" type="text" oninput="suggestTemplates()" onblur="hideSuggestions()" placeholder="search templates">
+
+    <div id="suggestions"></div>
+
+    <div id="template">
+        Platelets >=
+        <div id="" class="dropdown">
+            <button class="dropbtn">75,000</button>
+            <div id="myDropdown" class="dropdown-content">
+                <div>75,000</div>
+                <div>100,000</div>
+            </div>
+        </div>
+        /mcL
+        <div class="dropdown">
+            <button class="dropbtn">21</button>
+            <div id="myDropdown" class="dropdown-content">
+                <div> </div>
+                <div> obtained =&lt; <div class="dropdown">
+                        <button class="dropbtn">21</button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <div>21</div>
+                            <div>14</div>
+                            <div>30</div>
+                        </div>
+                        days prior to registration
+                        <div class="dropdown">
+                            <button class="dropbtn">21</button>
+                            <div id="myDropdown" class="dropdown-content">
+                                <div></div>
+                                <div>(transfusion independent, defined as not receiving platelet transfusions for at
+                                    least
+                                    7 days prior to enrollment)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="results">
+            <div class="result">compatible trial</div>
+            <div class="result">compatible trial</div>
+            <div class="result">compatible trial</div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+        <script src="../js/main.js"></script>
+</body>
+
+</html>
