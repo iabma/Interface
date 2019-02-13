@@ -8,6 +8,108 @@
     <title>formatter</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Roboto:300,400");
+@import url('https://fonts.googleapis.com/css?family=Nova+Flat');
+@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+    body {
+  background-color: #ececec;
+  font-family: 'Roboto';
+  font-size: 16px;
+  padding: 0px;
+  margin: 0px;
+}
+textarea {
+  -webkit-text-stroke-width: 0px;
+}
+#template {
+  display: inline-block;
+  transition: .3s;
+  background-color: #414141;
+  border-radius: 5px;
+  color: white;
+  font: "Roboto", sans-serif;
+  margin: 10px;
+  padding: 10px;
+  width: fit-content;
+}
+#template:hover {
+  background-color: #e47169;
+  transition: .3s;
+}
+#json {
+  display: inline-block;
+  font-size: 14px;
+}
+.template {
+  -webkit-user-select: none;
+  display: block;
+  transition: .3s;
+  border-radius: 5px;
+  color: white;
+  font: "Roboto", sans-serif;
+  font-weight: 900;
+  margin: 10px;
+  padding: 10px;
+  width: fit-content;
+}
+.template:hover {
+  color: #e47169;
+  transition: .3s;
+}
+.field {
+  display: flex;
+  resize: none;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  width: fit-content;
+  padding: 5px;
+  margin: 5px;
+  height: 16px;
+}
+.create {
+  display: inline;
+  -webkit-user-select: none;
+  transition: .3s;
+  z-index: 1;
+  color: white;
+  font-weight: 900;
+  font: "Roboto", sans-serif;
+  /* position: relative;
+    right: -110%; */
+  margin: 5px;
+  padding: 0px 4px;
+  background-color: #e47169;
+  border-radius: 15px;
+}
+.create:hover {
+  transition: .3s;
+  color: #e47169;
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+    </style>
     <link rel="stylesheet" href="https://raw.githubusercontent.com/iabma/Interface/master/formatter/fonts.css" />
     <link rel="stylesheet" href="https://raw.githubusercontent.com/iabma/Interface/master/formatter/formatter.css" />
 </head>
@@ -27,7 +129,374 @@
     <textarea type="text" style="width:300px;height: 16px;" placeholder="content"></textarea> -->
     <div id="out" style="white-space:pre-wrap;width:fit-content;display:block;font-family:'Courier New', Courier, monospace;border-radius:5px;"></div>
     <pre id="json"></pre>
-    <script src="https://raw.githubusercontent.com/iabma/Interface/master/formatter/formatter.js"></script>
+    <script>let input = document.getElementsByTagName("textarea")[0],
+    output = document.getElementById("out");
+
+var level = 0,
+    inProgression = 0,
+    inVariable = 0,
+    isFirst = true,
+    updating = false,
+    updateString = "";
+edits = [],
+    undone = [];
+
+var formatted = {},
+    id = 0;
+
+let backgroundColor = d3.scaleLinear()
+    .domain([0, 15])
+    .range(["rgb(220, 220, 220)", "rgb(24, 24, 24)"])
+    .interpolate(d3.interpolateHcl)
+
+function search(id, tree) {
+    let returnVal = null;
+    Object.keys(tree).forEach(obj => {
+        if (tree[obj].id == id) {
+            returnVal = tree[obj];
+        }
+    });
+
+    return returnVal;
+}
+
+function searchType(id, tree) {
+    console.log(tree.id)
+    console.log(id)
+    if (tree.id == id) {
+        return tree;
+    }
+    if (tree.content != null) {
+        var i, result = null;
+        console.log("pls");
+
+        for (i = 0; result == null && i < tree.content.length; i++) {
+            console.log("hi")
+            result = searchType(id, tree.content[i]);
+        }
+
+        return result;
+    }
+
+    return null;
+}
+
+function replaceStr(tree, id, content) {
+    if (tree.content != null) {
+        var found = false;
+        tree.content.forEach(obj => {
+            if (obj.id == id) {
+                obj.content = content;
+                found = true;
+            }
+        });
+        if (!found) {
+            tree.content.push({
+                id: id,
+                type: "text",
+                content: content
+            });
+        }
+    } else {
+        tree.content = [{
+            id: id,
+            type: "text",
+            content: content
+        }];
+    }
+}
+
+function addDrop(tree, id, name) {
+    if (tree.content != null) {
+        var found = false;
+        tree.content.forEach(obj => {
+            if (obj.id == id) {
+                obj.name = name;
+                found = true;
+            }
+        });
+        if (!found) {
+            tree.content.push({
+                id: id,
+                type: "variable",
+                name: name,
+                content: []
+            });
+        }
+    } else {
+        tree.content = [{
+            id: id,
+            type: "variable",
+            name: name,
+            content: []
+        }];
+    }
+}
+
+function addProgression(tree, id) {
+    if (tree.content != null) {
+        tree.content.push({
+            id: id,
+            type: "progression",
+            content: []
+        });
+    } else {
+        tree.content = [{
+            id: id,
+            type: "progression",
+            content: []
+        }];
+    }
+}
+
+function newTemplate() {
+    document.getElementById("template").remove();
+    let remove = document.createElement("div");
+    remove.className = "create";
+    remove.innerHTML = "x";
+    remove.addEventListener("click", () => {
+        template.remove();
+    })
+    let addType = document.createElement("div");
+    addType.className = "create";
+    addType.innerHTML = "add type";
+    addType.addEventListener("click", () => {
+        newType()
+    });
+    let field = document.createElement("textarea");
+    field.className = "field";
+    field.placeholder = "template name";
+    let template = document.createElement("div");
+    template.className = "template";
+    template.id = "mainTemplate";
+    template.style.background = backgroundColor(0);
+    template.appendChild(remove);
+    template.appendChild(addType);
+    template.appendChild(field);
+    output.appendChild(template);
+    field.focus();
+    field.addEventListener("keyup", () => {
+        formatted.name = field.value;
+        updateJSON();
+    });
+}
+
+function newType() {
+    var depth = 1;
+    let remove = document.createElement("div");
+    remove.className = "create";
+    remove.innerHTML = "x";
+    let string = document.createElement("div");
+    string.className = "create";
+    string.innerHTML = "add text";
+    let dropdown = document.createElement("div");
+    dropdown.className = "create";
+    dropdown.innerHTML = "add dropdown";
+    let field = document.createElement("textarea");
+    field.className = "field";
+    field.placeholder = "type";
+    let type = document.createElement("div");
+    type.className = "template";
+    type.id = id++;
+    type.name = "type";
+    type.style.background = backgroundColor(depth);
+    type.appendChild(remove);
+    type.appendChild(string);
+    type.appendChild(dropdown);
+    type.appendChild(field);
+    document.getElementById("mainTemplate").appendChild(type);
+    field.focus();
+    var prev,
+        prevContent = [];
+    field.addEventListener("keyup", () => {
+        if (prev != null) {
+            if (prevContent.length > 0) {
+                prevContent = formatted[prev].content;
+            }
+            delete formatted[prev];
+        }
+        formatted[field.value] = {
+            id: type.id,
+            content: prevContent
+        };
+        prev = field.value;
+        updateJSON();
+    });
+    string.addEventListener("click", () => {
+        newString(type, field, depth);
+    });
+    dropdown.addEventListener("click", () => {
+        newDropdown(type, field, depth);
+    });
+    remove.addEventListener("click", () => {
+        delete search(type.id, formatted);
+        type.remove();
+    })
+}
+
+function newString(parent, name, depth) {
+    let remove = document.createElement("div");
+    remove.className = "create";
+    remove.innerHTML = "x";
+    let field = document.createElement("textarea");
+    field.className = "field";
+    field.placeholder = "enter text";
+    let string = document.createElement("div");
+    string.className = "template";
+    string.id = id++;
+    string.style.background = backgroundColor(depth + 1);
+    string.appendChild(remove);
+    parent.appendChild(string);
+    string.appendChild(field);
+    if (parent.name == "type") {
+        replaceStr(search(parent.id, formatted), string.id, field.value);
+    } else {
+        replaceStr(searchType(parent.id, formatted[name.value]), string.id, field.value);
+    }
+    updateJSON();
+    field.focus();
+    field.addEventListener("keyup", () => {
+        if (parent.name == "type") {
+            replaceStr(search(parent.id, formatted), string.id, field.value);
+        } else {
+            replaceStr(searchType(parent.id, formatted[name.value]), string.id, field.value);
+        }
+        updateJSON();
+    });
+    remove.addEventListener("click", () => {
+        if (parent.name == "type") {
+            let content = search(parent.id, formatted).content
+            content.splice(content.indexOf(searchType(string.id, formatted[name.value])), 1);
+        } else {
+            let content = searchType(parent.id, formatted[name.value]).content
+            content.splice(content.indexOf(searchType(string.id, formatted[name.value])), 1);
+        }
+        string.remove();
+        updateJSON();
+    })
+}
+
+function newDropdown(parent, name, depth) {
+    depth++;
+    let remove = document.createElement("div");
+    remove.className = "create";
+    remove.innerHTML = "x";
+    let string = document.createElement("div");
+    string.className = "create";
+    string.innerHTML = "add text";
+    let dropdown = document.createElement("div");
+    dropdown.className = "create";
+    dropdown.innerHTML = "add dropdown";
+    let progression = document.createElement("div");
+    progression.className = "create";
+    progression.innerHTML = "add progression";
+    let field = document.createElement("textarea");
+    field.className = "field";
+    field.placeholder = "name";
+    let drop = document.createElement("div");
+    drop.className = "template";
+    drop.id = id++;
+    drop.style.background = backgroundColor(depth);
+    drop.appendChild(remove);
+    drop.appendChild(string);
+    drop.appendChild(dropdown);
+    drop.appendChild(progression);
+    drop.appendChild(field);
+    parent.appendChild(drop);
+    field.focus();
+    var exists = false,
+        prevContent = [];
+    field.addEventListener("keyup", () => {
+        if (exists && prevContent.length > 0) {
+            searchType(drop.id, formatted[name.value]).name = field.value;
+        } else {
+            if (parent.name == "type") {
+                addDrop(search(parent.id, formatted), drop.id, field.value);
+            } else {
+                addDrop(searchType(parent.id, formatted[name.value]), drop.id, field.value);
+            }
+            exists = true;
+        }
+        updateJSON();
+    });
+    string.addEventListener("click", () => {
+        newString(drop, name, depth);
+    });
+    dropdown.addEventListener("click", () => {
+        newDropdown(drop, name, depth);
+    });
+    progression.addEventListener("click", () => {
+        newProgression(drop, name, depth);
+    });
+    remove.addEventListener("click", () => {
+        if (parent.name == "type") {
+            let content = search(parent.id, formatted).content
+            content.splice(content.indexOf(searchType(drop.id, formatted[name.value])), 1);
+        } else {
+            let content = searchType(parent.id, formatted[name.value]).content
+            content.splice(content.indexOf(searchType(drop.id, formatted[name.value])), 1);
+        }
+        drop.remove();
+        updateJSON();
+    })
+}
+
+function newProgression(parent, name, depth) {
+    depth++;
+    let remove = document.createElement("div");
+    remove.className = "create";
+    remove.innerHTML = "x";
+    let string = document.createElement("div");
+    string.className = "create";
+    string.innerHTML = "add text";
+    let dropdown = document.createElement("div");
+    dropdown.className = "create";
+    dropdown.innerHTML = "add dropdown";
+    let progression = document.createElement("div");
+    progression.className = "template";
+    progression.id = id++;
+    progression.style.background = backgroundColor(depth);
+    progression.appendChild(remove);
+    progression.appendChild(string);
+    progression.appendChild(dropdown);
+    parent.appendChild(progression);
+    if (parent.name == "type") {
+        let tree = search(parent.id, formatted)
+        addProgression(tree, progression.id);
+    } else {
+        let tree = searchType(parent.id, formatted[name.value])
+        addProgression(tree, progression.id);
+    }
+    updateJSON();
+    string.addEventListener("click", () => {
+        newString(progression, name, depth);
+    });
+    dropdown.addEventListener("click", () => {
+        newDropdown(progression, name, depth);
+    });
+    remove.addEventListener("click", () => {
+        if (parent.name == "type") {
+            let content = search(parent.id, formatted).content
+            content.splice(content.indexOf(searchType(progression.id, formatted[name.value])), 1);
+        } else {
+            let content = searchType(parent.id, formatted[name.value]).content
+            content.splice(content.indexOf(searchType(progression.id, formatted[name.value])), 1);
+        }
+        progression.remove();
+        updateJSON();
+    })
+}
+
+function updateJSON() {
+    document.getElementById("json").innerHTML = JSON.stringify(formatted, undefined, 4);
+}
+
+document.getElementById("json").addEventListener("click", () => {
+    var range = document.createRange();
+    range.selectNode(document.getElementById("json"));
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+});</script>
 </body>
 
 </html>
