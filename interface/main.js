@@ -1,5 +1,3 @@
-M.AutoInit();
-
 let dropdowns = document.getElementsByClassName("dropdown"),
     searchBar = document.getElementById("template-search"),
     suggestions = document.getElementById("suggestions");

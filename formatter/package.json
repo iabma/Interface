@@ -1,0 +1,14 @@
+{
+  "name": "template-creator",
+  "version": "1.0.0",
+  "description": "returns formatted JSON template",
+  "scripts": {
+    "lite": "lite-server --port 10001",
+    "start": "npm run lite"
+  },
+  "author": "name",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^1.3.1"
+  }
+}
