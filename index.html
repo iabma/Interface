@@ -22,15 +22,22 @@
 </head>
 
 <body>
-    <input id="template-search" type="text" oninput="suggestTemplates()" onblur="hideSuggestions()" placeholder="search templates">
+    <input id="template-search" type="text" class="noblur" placeholder="search">
+    <div id="search-type" class="dropdown noblur">
+        <button class="dropbtn">templates</button>
+        <div class="dropdown-content">
+            <div class="search-type">templates</div>
+            <div class="search-type">all suggestions</div>
+        </div>
+    </div>
 
-    <div id="suggestions"></div>
+    <div id="suggestions" class="noblur"></div>
 
     <div id="template">
         Platelets >=
         <div id="" class="dropdown">
             <button class="dropbtn">75,000</button>
-            <div id="myDropdown" class="dropdown-content">
+            <div class="dropdown-content">
                 <div>75,000</div>
                 <div>100,000</div>
             </div>
@@ -38,11 +45,11 @@
         /mcL
         <div class="dropdown">
             <button class="dropbtn">21</button>
-            <div id="myDropdown" class="dropdown-content">
+            <div class="dropdown-content">
                 <div> </div>
                 <div> obtained =&lt; <div class="dropdown">
                         <button class="dropbtn">21</button>
-                        <div id="myDropdown" class="dropdown-content">
+                        <div class="dropdown-content">
                             <div>21</div>
                             <div>14</div>
                             <div>30</div>
@@ -50,7 +57,7 @@
                         days prior to registration
                         <div class="dropdown">
                             <button class="dropbtn">21</button>
-                            <div id="myDropdown" class="dropdown-content">
+                            <div class="dropdown-content">
                                 <div></div>
                                 <div>(transfusion independent, defined as not receiving platelet transfusions for at
                                     least
@@ -62,17 +69,18 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="results">
-            <div class="result">compatible trial</div>
-            <div class="result">compatible trial</div>
-            <div class="result">compatible trial</div>
-        </div>
+    <div id="results">
+        <div class="result">compatible trial</div>
+        <div class="result">compatible trial</div>
+        <div class="result">compatible trial</div>
+    </div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-        <script src="main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
