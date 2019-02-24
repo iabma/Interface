@@ -114,12 +114,12 @@ async function findEveryPossibility() {
         iterate(possibilites, template.English);
         templates[template.name] = possibilites;
     });
+    updateDropdownAnim();
 }
 
 function iterate(arr, obj, str) {
     if (str == null)
         str = "";
-    console.log(str, obj, obj.content)
 
     obj.content.forEach(element => {
         if (element.type == "text") {
@@ -154,7 +154,7 @@ function getPossibleTemplates() {
             i++;
         }
     });
-    showPossibilities()
+    showPossibilities();
 }
 
 function getAllPossibilities() {
@@ -165,7 +165,7 @@ function getAllPossibilities() {
                 potentialReturns.push(possibility);
         });
     });
-    showPossibilities()
+    showPossibilities();
 }
 
 function noResults() {
@@ -195,7 +195,6 @@ function openSuggestion(suggestion) {
     hideSuggestions();
     if (templates[suggestion] != null) {
         let templateObj = getTemplate(suggestion);
-        console.log(templateObj)
         createTemplateVisual(templateObj.English.content);
     } else {
         document.getElementById("template").innerHTML = suggestion;
@@ -208,7 +207,6 @@ function createTemplateVisual(content) {
         if (element.type == "text") {
             document.getElementById("template").innerHTML += element.content;
         } else if (element.type == "variable") {
-            console.log(addDropdown(element.name, element.content));
             document.getElementById("template").innerHTML += addDropdown(element.name, element.content);
         }
     });
