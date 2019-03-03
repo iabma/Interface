@@ -55,17 +55,36 @@ body {
   margin: 15px;
   padding: 10px;
 }
+#search-type .dropbtn {
+  padding: 5px;
+  background-color: #414141;
+  color: white;
+}
+#search-type .dropbtn:hover {
+  background-color: #e47169;
+  color: white;
+}
+#search-type .dropdown-content div {
+  background-color: #414141;
+  color: white;
+}
+#search-type .dropdown-content div:hover {
+  background-color: #e47169;
+}
 .dropdown {
   position: relative;
   display: inline-block;
 }
 .dropdown .dropbtn {
   outline: none;
-  background-color: #414141;
-  color: white;
-  padding: 5px;
-  font-size: 16px;
+  background-color: gainsboro;
+  border: solid transparent;
+  border-width: 1px;
   border-radius: 5px;
+  color: black;
+  padding: 2px;
+  margin: 2px;
+  font-size: 16px;
 }
 .dropdown .dropdown-content {
   display: none;
@@ -73,21 +92,25 @@ body {
   background-color: transparent;
   border-radius: 5px;
   z-index: 1;
+  border-width: 0px;
 }
 .dropdown .dropdown-content div {
   line-height: 16px;
   width: fit-content;
+  background-color: gainsboro;
+  border: solid transparent;
+  border-width: 1px;
   border-radius: 5px;
-  background-color: #f1f1f1;
-  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
-  margin: 5px 0px;
   color: black;
-  padding: 12px 12px;
+  padding: 6px;
+  margin: 5px;
   display: block;
 }
 .dropdown .dropdown-content div:hover {
-  background-color: #414141;
-  color: white;
+  border-color: #e47169;
+}
+.progression {
+  border-radius: 5px;
 }
 #results {
   background-color: gainsboro;
@@ -101,6 +124,18 @@ body {
   margin: 10px;
   padding: 10px;
   border-radius: 5px;
+}
+#add-custom {
+  outline: none;
+  background-color: #414141;
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+  margin: 5px;
+  font-size: 16px;
+}
+#add-custom:hover {
+  background-color: #e47169;
 }
 ::-webkit-scrollbar {
   display: none;

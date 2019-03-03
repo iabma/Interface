@@ -67,17 +67,44 @@ body {
     padding: 10px;
 }
 
+#search-type {
+    .dropbtn {
+        padding: 5px;
+        background-color: @dark;
+        color: white;
+    }
+
+    .dropbtn:hover {
+        background-color: @red;
+        color: white;
+    }
+
+    .dropdown-content {
+        div {
+            background-color: @dark;
+            color: white;
+        }
+
+        div:hover {
+            background-color: @red;
+        }
+    }
+}
+
 .dropdown {
     position: relative;
     display: inline-block;
 
     .dropbtn {
         outline: none;
-        background-color: @dark;
-        color: white;
-        padding: 5px;
-        font-size: 16px;
+        background-color: gainsboro;
+        border: solid transparent;
+        border-width: 1px;
         border-radius: @radius;
+        color: black;
+        padding: 2px;
+        margin: 2px;
+        font-size: 16px;
     }
 
     .dropdown-content {
@@ -86,24 +113,30 @@ body {
         background-color: transparent;
         border-radius: @radius;
         z-index: 1;
+        border-width: 0px;
     
         div {
             line-height: 16px;
             width: fit-content;
+            background-color: gainsboro;
+            border: solid transparent;
+            border-width: 1px;
             border-radius: @radius;
-            background-color: #f1f1f1;
-            box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
-            margin: 5px 0px;
+            //box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
             color: black;
-            padding: 12px 12px;
+            padding: 6px;
+            margin: 5px;
             display: block;
         }
     
         div:hover {
-            background-color: @dark;
-            color: white;
+            border-color: @red;
         }
     }
+}
+
+.progression {
+    border-radius: @radius;
 }
 
 #results {
@@ -119,6 +152,20 @@ body {
         padding: 10px;
         border-radius: @radius;
     }
+}
+
+#add-custom {
+    outline: none;
+    background-color: @dark;
+    border-radius: @radius;
+    color: white;
+    padding: 5px;
+    margin: 5px;
+    font-size: 16px;
+}
+
+#add-custom:hover {
+    background-color: @red;
 }
 
 ::-webkit-scrollbar { 

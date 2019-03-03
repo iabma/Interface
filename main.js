@@ -2,30 +2,95 @@ let dropdowns = document.getElementsByClassName("dropdown"),
     searchBar = document.getElementById("template-search"),
     suggestions = document.getElementById("suggestions");
 
-const url = "https://raw.githubusercontent.com/iabma/Templates/master/templates.json?token=ANUf8nJdZv_X_zy_EYCvZw6CIYxo4FZFks5cd_RYwA%3D%3D";
+const url = "https://raw.githubusercontent.com/iabma/Templates/master/templates.json?token=ANUf8hSAkaJF3-8mmOo6skwZxZ3G3Zooks5cfDABwA%3D%3D";
 
 var currentSuggestion = -1,
     potentialReturns = [],
-    templateData = [];
+    templateData = [],
+    currentTemplateData,
+    variableData = {};
 
 let templates = {};
 
+let backgroundColor = d3.scaleLinear()
+    .domain([0, 15])
+    .range(["gainsboro", "rgb(24, 24, 24)"])
+    .interpolate(d3.interpolateHcl);
+
+document.getElementById("add-custom").addEventListener("click", () => {
+    let content = document.getElementById("template").innerHTML;
+    if (content == "Use the search bar to begin.")
+        return;
+    console.log(currentTemplateData);
+    currentTemplateData.forEach((str, i) => {
+        let variable = document.getElementById(str);
+        if (variable != null) {
+            let content = variable.children[0].innerHTML;
+            if (!content.includes("<")) {
+                if (content == "empty") {
+                    currentTemplateData[i] = ""
+                } else {
+                    currentTemplateData[i] = content;
+                }
+            } else
+                currentTemplateData[i] = getVariableData(variable);
+        }
+    });
+    console.log(currentTemplateData.join());
+});
+
+function getVariableData(variable) {
+    let data = variableData[variable.id];
+    data.forEach((str, i) => {
+        let variable = document.getElementById(str);
+        if (variable != null) {
+            let content = variable.children[0].innerHTML;
+            if (!content.includes("<")) {
+                if (content == "empty") {
+                    data[i] = ""
+                } else {
+                    data[i] = content;
+                }
+            } else
+                data[i] = getVariableData(variable);
+        }
+    });
+    return data.join("");
+}
 
 function updateDropdownAnim() {
-    Array.from(dropdowns).forEach(dropdown => {
+    Array.from(document.getElementsByClassName("dropdown")).forEach(dropdown => {
+        //dropdown.children[0].addEventListener("click", () =>)
         dropdown.addEventListener("mouseenter", () => {
-            dropdown.children[0].style.background = "#e47169";
+            dropdown.children[0].style.borderColor = "#e47169";
             dropdown.children[1].style.display = "block";
+            /* console.log(dropdown.children[1].children)
+            Array.from(dropdown.children[1].children).forEach(child => {
+                if (child.innerHTML.includes("dropdown")) {
+                    Array.from(child.getElementsByClassName("dropdown-content")).forEach(element => {
+                        element.style.display = "none";
+                    });
+                }
+            }); */
         })
 
         dropdown.addEventListener("mouseleave", () => {
-            dropdown.children[0].style.background = "rgb(65, 65, 65)";
+            dropdown.children[0].style.borderColor = "transparent";
             dropdown.children[1].style.display = "none";
         })
 
+        dropdown.addEventListener("click", () => {
+            dropdown.children[0].style.borderColor = "transparent";
+            dropdown.children[1].style.display = "none";
+        });
+
         Array.from(dropdown.getElementsByClassName("dropdown-content")[0].getElementsByTagName("div")).forEach(element => {
+            //console.log(element)
             element.addEventListener("click", () => {
+                dropdown.getElementsByClassName("dropdown-content")[0].style.display = "none";
+                dropdown.children[0].style.borderColor = "transparent";
                 dropdown.getElementsByClassName("dropbtn")[0].innerHTML = element.innerHTML;
+                stylize(dropdown.getElementsByClassName("dropbtn")[0]);
                 if (element.className == "search-type" && document.body.classList.contains("blurred")) {
                     runQuery(element.innerHTML);
                 }
@@ -203,56 +268,74 @@ function openSuggestion(suggestion) {
 
 function createTemplateVisual(content) {
     document.getElementById("template").innerHTML = "";
+    currentTemplateData = [];
     content.forEach(element => {
         if (element.type == "text") {
+            currentTemplateData.push(element.content);
             document.getElementById("template").innerHTML += element.content;
         } else if (element.type == "variable") {
-            document.getElementById("template").innerHTML += addDropdown(element.name, element.content);
+            currentTemplateData.push(element.name);
+            document.getElementById("template").innerHTML += addDropdown(element.name, element.content, 1);
         }
     });
 
     updateDropdownAnim();
 }
 
-function addProgression(content) {
+function addProgression(content, depth, dataArr) {
     let progression = document.createElement("div");
     progression.className = "progression";
+    progression.style.background = backgroundColor(depth);
 
     content.forEach(element => {
         if (element.type == "text") {
-            progression.innerHTML += element.content;
+            currentTemplateData.push(element.content);
+            progression.innerHTML += element.content == "" ? "empty" : element.content;
         } else if (element.type == "variable") {
-            progression.innerHTML += addDropdown(element.name, element.content);
+            progression.innerHTML += addDropdown(element.name, element.content, depth + 1);
         }
     });
+    stylize(progression);
 
     return progression.outerHTML;
 }
 
-function addDropdown(name, options) {
+function addDropdown(name, options, depth) {
+    variableData[name] = [];
+
+    if (options[0].type == "text") {
+        variableData[name].push(options[0].content)
+    }
+
     let container = document.createElement("div");
     container.className = "dropdown";
     container.id = name;
 
     let button = document.createElement("div");
     button.className = "dropbtn";
+    button.style.background = backgroundColor(depth);
     if (options[0])
-        button.innerHTML = options[0].type == "text" ? options[0].content : options[0].type == "progression" ? addProgression(options[0].content) : addDropdown(options[0].name, options[0].content);
+        button.innerHTML = options[0].type == "text" ? options[0].content == "" ? "empty" : options[0].content : options[0].type == "progression" ? addProgression(options[0].content, depth + 1, variableData[name]) : addDropdown(options[0].name, options[0].content, depth + 1);
     else
         button.innerHTML = "";
+    stylize(button)
 
     let content = document.createElement("div");
     content.className = "dropdown-content";
+    content.style.display = "none";
+    content.style.background = backgroundColor(depth);
 
     options.forEach(option => {
         let opt = document.createElement("div");
         if (option.type == "text") {
-            opt.innerHTML = option.content;
+            opt.innerHTML = option.content == "" ? "empty" : option.content;
         } else if (option.type == "progression") {
-            opt.innerHTML = addProgression(option.content);
+            opt.innerHTML = addProgression(option.content, depth + 1);
         } else if (option.type == "dropdown") {
-            opt.innerHTML = addDropdown(option.name, option.content);
+            opt.innerHTML = addDropdown(option.name, option.content, depth + 1);
         }
+        stylize(opt);
+        opt.style.background = backgroundColor(depth + 1);
         content.appendChild(opt);
     });
 
@@ -274,7 +357,7 @@ function showPossibilities() {
 }
 
 function runQuery(param) {
-    if (param == "templates") {
+    if (param == "Templates") {
         getPossibleTemplates();
     } else {
         getAllPossibilities();
@@ -289,6 +372,22 @@ function getTemplate(name) {
         }
     })
     return templt;
+}
+
+function stylize(element) {
+    if (element.innerHTML == "empty") {
+        element.style.color = "gray";
+        element.style.fontSize = "12px";
+        element.style.fontWeight = "bold";
+        element.style.padding = "6px 12px";
+    } else {
+        element.style.color = "black";
+        element.style.fontSize = "16px";
+        element.style.fontWeight = "normal";
+        element.style.padding = "6px";
+        if (element.parentNode && element.parentNode.id == "search-type")
+            element.style.color = "white";
+    }
 }
 
 readTemplateData();
