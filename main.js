@@ -2,60 +2,59 @@ let dropdowns = document.getElementsByClassName("dropdown"),
     searchBar = document.getElementById("template-search"),
     suggestions = document.getElementById("suggestions");
 
-const url = "https://raw.githubusercontent.com/iabma/Templates/master/templates.json?token=ANUf8hSAkaJF3-8mmOo6skwZxZ3G3Zooks5cfDABwA%3D%3D";
+const url = "https://raw.githubusercontent.com/iabma/Templates/master/templates.json";
 
 var currentSuggestion = -1,
     potentialReturns = [],
-    templateData = [],
-    currentTemplateData,
-    variableData = {};
+    templateData = [];
 
 let templates = {};
 
 let backgroundColor = d3.scaleLinear()
-    .domain([0, 15])
-    .range(["gainsboro", "rgb(24, 24, 24)"])
+    .domain([0, 8])
+    .range(["rgb(231, 230, 230)", "#e47169"])
     .interpolate(d3.interpolateHcl);
+let fontColor = d3.scaleLinear()
+.domain([0, 12])
+.range(["black", "grey"])
+.interpolate(d3.interpolateHcl);
 
 document.getElementById("add-custom").addEventListener("click", () => {
-    let content = document.getElementById("template").innerHTML;
+    let content = document.getElementById("template").children;
     if (content == "Use the search bar to begin.")
         return;
-    console.log(currentTemplateData);
-    currentTemplateData.forEach((str, i) => {
-        let variable = document.getElementById(str);
-        if (variable != null) {
-            let content = variable.children[0].innerHTML;
-            if (!content.includes("<")) {
-                if (content == "empty") {
-                    currentTemplateData[i] = ""
-                } else {
-                    currentTemplateData[i] = content;
-                }
-            } else
-                currentTemplateData[i] = getVariableData(variable);
+    var templateOutput = [];
+    Array.from(content).forEach(element => {
+        if (element.tagName == "SPAN") {
+            templateOutput.push(element.innerHTML == "empty" ? "" : element.innerHTML);
+        } else {
+            enterDropdown(element, templateOutput);
         }
     });
-    console.log(currentTemplateData.join());
+    var editableTemplate = document.createElement("div");
+    editableTemplate.contentEditable = "true";
+    editableTemplate.innerHTML = templateOutput.join("").decodeHTML();
+    document.getElementById("template-holder").appendChild(editableTemplate);
 });
 
-function getVariableData(variable) {
-    let data = variableData[variable.id];
-    data.forEach((str, i) => {
-        let variable = document.getElementById(str);
-        if (variable != null) {
-            let content = variable.children[0].innerHTML;
-            if (!content.includes("<")) {
-                if (content == "empty") {
-                    data[i] = ""
-                } else {
-                    data[i] = content;
-                }
-            } else
-                data[i] = getVariableData(variable);
+function enterDropdown(parent, templateOutput) {
+    Array.from(parent.children[0].children).forEach(element => {
+        if (element.tagName == "SPAN") {
+            templateOutput.push(element.innerHTML == "empty" ? "" : element.innerHTML);
+        } else {
+            enterProgression(element, templateOutput);
         }
     });
-    return data.join("");
+}
+
+function enterProgression(parent, templateOutput) {
+    Array.from(parent.children).forEach(element => {
+        if (element.tagName == "SPAN") {
+            templateOutput.push(element.innerHTML);
+        } else {
+            enterDropdown(element, templateOutput);
+        }
+    });
 }
 
 function updateDropdownAnim() {
@@ -87,6 +86,7 @@ function updateDropdownAnim() {
         Array.from(dropdown.getElementsByClassName("dropdown-content")[0].getElementsByTagName("div")).forEach(element => {
             //console.log(element)
             element.addEventListener("click", () => {
+                let prevContent = dropdown.getElementsByClassName("dropbtn")[0].innerHTML;
                 dropdown.getElementsByClassName("dropdown-content")[0].style.display = "none";
                 dropdown.children[0].style.borderColor = "transparent";
                 dropdown.getElementsByClassName("dropbtn")[0].innerHTML = element.innerHTML;
@@ -262,19 +262,20 @@ function openSuggestion(suggestion) {
         let templateObj = getTemplate(suggestion);
         createTemplateVisual(templateObj.English.content);
     } else {
-        document.getElementById("template").innerHTML = suggestion;
+        let content = document.createElement("span");
+        content.innerHTML = suggestion
+        document.getElementById("template").appendChild(content);
     }
 }
 
 function createTemplateVisual(content) {
     document.getElementById("template").innerHTML = "";
-    currentTemplateData = [];
     content.forEach(element => {
         if (element.type == "text") {
-            currentTemplateData.push(element.content);
-            document.getElementById("template").innerHTML += element.content;
+            let text = document.createElement("span")
+            text.innerHTML = element.content == "" ? "empty" : element.content;
+            document.getElementById("template").appendChild(text);
         } else if (element.type == "variable") {
-            currentTemplateData.push(element.name);
             document.getElementById("template").innerHTML += addDropdown(element.name, element.content, 1);
         }
     });
@@ -282,15 +283,17 @@ function createTemplateVisual(content) {
     updateDropdownAnim();
 }
 
-function addProgression(content, depth, dataArr) {
+function addProgression(content, depth) {
     let progression = document.createElement("div");
     progression.className = "progression";
     progression.style.background = backgroundColor(depth);
+    progression.style.color = fontColor(depth);
 
     content.forEach(element => {
         if (element.type == "text") {
-            currentTemplateData.push(element.content);
-            progression.innerHTML += element.content == "" ? "empty" : element.content;
+            let text = document.createElement("span")
+            text.innerHTML = element.content == "" ? "empty" : element.content;
+            progression.appendChild(text);
         } else if (element.type == "variable") {
             progression.innerHTML += addDropdown(element.name, element.content, depth + 1);
         }
@@ -301,12 +304,6 @@ function addProgression(content, depth, dataArr) {
 }
 
 function addDropdown(name, options, depth) {
-    variableData[name] = [];
-
-    if (options[0].type == "text") {
-        variableData[name].push(options[0].content)
-    }
-
     let container = document.createElement("div");
     container.className = "dropdown";
     container.id = name;
@@ -314,8 +311,9 @@ function addDropdown(name, options, depth) {
     let button = document.createElement("div");
     button.className = "dropbtn";
     button.style.background = backgroundColor(depth);
+    button.style.color = fontColor(depth);
     if (options[0])
-        button.innerHTML = options[0].type == "text" ? options[0].content == "" ? "empty" : options[0].content : options[0].type == "progression" ? addProgression(options[0].content, depth + 1, variableData[name]) : addDropdown(options[0].name, options[0].content, depth + 1);
+        button.innerHTML = options[0].type == "text" ? options[0].content == "" ? "<span>empty</span>" : "<span>" + options[0].content + "</span>" : options[0].type == "progression" ? addProgression(options[0].content, depth + 1) : addDropdown(options[0].name, options[0].content, depth + 1);
     else
         button.innerHTML = "";
     stylize(button)
@@ -324,11 +322,12 @@ function addDropdown(name, options, depth) {
     content.className = "dropdown-content";
     content.style.display = "none";
     content.style.background = backgroundColor(depth);
+    content.style.color = fontColor(depth);
 
     options.forEach(option => {
         let opt = document.createElement("div");
         if (option.type == "text") {
-            opt.innerHTML = option.content == "" ? "empty" : option.content;
+            opt.innerHTML = option.content == "" ? "<span>empty</span>" : "<span>" + option.content + "</span>";
         } else if (option.type == "progression") {
             opt.innerHTML = addProgression(option.content, depth + 1);
         } else if (option.type == "dropdown") {
@@ -336,6 +335,7 @@ function addDropdown(name, options, depth) {
         }
         stylize(opt);
         opt.style.background = backgroundColor(depth + 1);
+        opt.style.color = fontColor(depth);
         content.appendChild(opt);
     });
 
@@ -375,7 +375,7 @@ function getTemplate(name) {
 }
 
 function stylize(element) {
-    if (element.innerHTML == "empty") {
+    if (element.innerHTML == "<span>empty</span>") {
         element.style.color = "gray";
         element.style.fontSize = "12px";
         element.style.fontWeight = "bold";
@@ -389,5 +389,16 @@ function stylize(element) {
             element.style.color = "white";
     }
 }
+
+String.prototype.decodeHTML = function () {
+    var map = {"gt":">", "lt":"<" /* , … */};
+    return this.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gi, ($0, $1) => {
+        if ($1[0] === "#") {
+            return String.fromCharCode($1[1].toLowerCase() === "x" ? parseInt($1.substr(2), 16)  : parseInt($1.substr(1), 10));
+        } else {
+            return map.hasOwnProperty($1) ? map[$1] : $0;
+        }
+    });
+};
 
 readTemplateData();
