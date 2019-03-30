@@ -174,7 +174,7 @@ function readTemplateData() {
 
 async function findEveryPossibility() {
     templateData.forEach(template => {
-        console.log(template)
+        //console.log(template)
         var possibilites = [];
         iterate(possibilites, template.English);
         templates[template.name] = possibilites;
@@ -186,9 +186,10 @@ function iterate(arr, obj, str) {
     if (str == null)
         str = "";
 
+    //console.log(obj)
     obj.content.forEach(element => {
         if (element.type == "text") {
-            if (obj.type == "variable")
+            if (obj.type == "dropdown")
                 arr.push(str + element.content);
             else
                 str += element.content;
@@ -275,7 +276,7 @@ function createTemplateVisual(content) {
             let text = document.createElement("span")
             text.innerHTML = element.content == "" ? "empty" : element.content;
             document.getElementById("template").appendChild(text);
-        } else if (element.type == "variable") {
+        } else if (element.type == "dropdown") {
             document.getElementById("template").innerHTML += addDropdown(element.name, element.content, 1);
         }
     });
@@ -294,7 +295,7 @@ function addProgression(content, depth) {
             let text = document.createElement("span")
             text.innerHTML = element.content == "" ? "empty" : element.content;
             progression.appendChild(text);
-        } else if (element.type == "variable") {
+        } else if (element.type == "dropdown") {
             progression.innerHTML += addDropdown(element.name, element.content, depth + 1);
         }
     });
