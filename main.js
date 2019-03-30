@@ -2,7 +2,7 @@ let dropdowns = document.getElementsByClassName("dropdown"),
     searchBar = document.getElementById("template-search"),
     suggestions = document.getElementById("suggestions");
 
-const url = "https://raw.githubusercontent.com/iabma/Templates/master/templates.json";
+const url = "https://raw.githubusercontent.com/hms-bcl/Templates/master/templates.json";
 
 var currentSuggestion = -1,
     potentialReturns = [],
