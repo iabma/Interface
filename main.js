@@ -186,6 +186,7 @@ function iterate(arr, obj, str) {
     if (str == null)
         str = "";
 
+    console.log(obj)
     obj.content.forEach(element => {
         if (element.type == "text") {
             if (obj.type == "variable")
