@@ -62,7 +62,7 @@ function togglePopup(id, area, span) {
     return popup;
 }
 
-function addSuggestion(s, e, id) { // INCLUSIVE EXCLUSIVE
+function addSuggestion(s, e, id) { // ! INCLUSIVE EXCLUSIVE
     let prev = area.innerHTML;
     suggestions.push({
         id: id,

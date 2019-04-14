@@ -5,15 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>interface</title>
+    <title>suggestor</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="fonts.css" />
+    <link rel="stylesheet" href="suggestor.css" />
 </head>
 
-<body style="overflow:hidden;background-color:white">
-    <iframe id="index" src="library.html"
-        style="border:none;position:absolute;right:0px;top:0px;height:100vh;width:50vw;display:inline-block;"></iframe>
-    <iframe src="processor.html"
-        style="border:none;position:absolute;left:0px;top:0px;height:100vh;width:50vw;display:inline-block;"></iframe>
-    <script src="main.js"></script>
+<body>
+    <div id="main-area" contenteditable="true" spellcheck="false">waddup my hella boi</div>
+    <iframe id="library" src="library.html"></iframe>
+    <div id="close" class="material-icons">close</div>
+    
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="suggestor.js"></script>
 </body>
 
 </html>
