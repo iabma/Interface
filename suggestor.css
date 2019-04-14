@@ -43,6 +43,7 @@ body {
   box-shadow: 6px;
 }
 #main-area {
+  white-space: pre;
   display: inline-block;
   position: absolute;
   padding: 5px;

@@ -78,14 +78,20 @@ function addSuggestion(s, e, id) { // ! INCLUSIVE EXCLUSIVE
     span.onkeyup = e => {
         getSuggestion(id).content = span.innerHTML;
         if (popup != null)
-            updatePopup(popup, { x: area.offsetLeft + span.offsetLeft, y: area.offsetTop + span.offsetTop + span.offsetHeight + 3, width: span.offsetWidth});
+            updatePopup(popup, { x: area.offsetLeft + span.offsetLeft, y: area.offsetTop + span.offsetTop + span.offsetHeight + 3, width: span.offsetWidth });
     };
 }
 
 area.onkeydown = e => {
     if (e.keyCode == 13) {
         e.preventDefault();
-        console.log(e);
+        let target = document.createTextNode("\n");
+        document.getSelection().getRangeAt(0).insertNode(target);
+        /* let position = contentEditableDiv.innerHTML.indexOf("\u0001");
+        target.parentNode.removeChild(target);
+        let prev = area.innerHTML.split(position);
+        area.innerHTML = prev[0] + "<br />" + prev[1];
+        console.log(e); */
         return false;
     }
 };
