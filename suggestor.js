@@ -55,7 +55,7 @@ function updatePopup(pop, pos) {
 function togglePopup(id, area, span) {
     let popup = document.getElementById("p" + id);
     if (popup == null)
-        popup = createPopup({ x: area.offsetLeft + span.offsetLeft, y: area.offsetTop + span.offsetTop + span.offsetHeight + 3, width: span.offsetWidth }, id, "fix to this algebrontina my guy", "Platelets");
+        popup = createPopup({ x: area.offsetLeft + span.offsetLeft, y: area.offsetTop + span.offsetTop + span.offsetHeight + 3, width: span.offsetWidth }, id, "suggestion", "Platelets");
     else if (popup.style.display == "none")
         popup.style.display = "block";
     else
