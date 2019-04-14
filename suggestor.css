@@ -59,6 +59,7 @@ body {
 .popup {
   position: absolute;
   background-color: #1d1d1d;
+  color: white;
   padding: 3px;
   border-radius: 3px;
   transition: 0.3s cubic-bezier(0.29, 0.87, 0.7, 1.02);
