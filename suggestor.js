@@ -95,5 +95,5 @@ document.getElementById("close").onclick = e => {
     document.getElementById("close").style.display = "none";
 };
 
-addSuggestion(22, 33, id++);
+addSuggestion(22, 31, id++);
 console.log(suggestions)
