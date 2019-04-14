@@ -1,6 +1,7 @@
 let area = document.getElementById("main-area");
 
-let suggestions = [];
+let suggestions = [],
+    id = 0;
 
 function getSuggestion(id) {
     let sugg = null
@@ -94,5 +95,5 @@ document.getElementById("close").onclick = e => {
     document.getElementById("close").style.display = "none";
 };
 
-addSuggestion(7, 15, 1);
+addSuggestion(22, 33, id++);
 console.log(suggestions)
