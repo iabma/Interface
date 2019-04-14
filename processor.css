@@ -1,0 +1,73 @@
+body {
+  color: white;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0b0c0e;
+  font-family: 'Roboto';
+  font-size: 16px;
+  -webkit-user-select: none;
+  padding: 0px;
+  margin: 0px;
+  filter: blur(0px);
+  transition: .2s;
+  overflow: hidden;
+}
+#input {
+  -webkit-user-select: text;
+  outline: none;
+  position: absolute;
+  padding: 5px;
+  left: 5px;
+  top: 5px;
+  width: calc(50% - 25px);
+  height: calc(100% - 20px);
+  display: inline-block;
+}
+#divider {
+  position: absolute;
+  background-color: white;
+  bottom: 5%;
+  left: calc(50% - 1px);
+  width: 2px;
+  height: 90%;
+  display: inline-block;
+}
+#output {
+  position: absolute;
+  padding: 5px;
+  right: 5px;
+  top: 5px;
+  width: calc(50% - 25px);
+  height: calc(100% - 20px);
+  display: inline-block;
+}
+.highlight {
+  border-radius: 2px;
+  padding: 2px;
+  margin: 0px 1px;
+  background-color: #f54f43;
+  color: white;
+  transition: 0.3s cubic-bezier(0.29, 0.87, 0.7, 1.02);
+  line-height: 1.7;
+}
+.span-hover {
+  padding: 5px;
+  background-color: white;
+  color: black;
+  transition: 0.3s cubic-bezier(0.29, 0.87, 0.7, 1.02);
+}
+.template {
+  padding: 5px;
+  margin: 5px;
+  width: fit-content;
+  height: 30px;
+  background-color: white;
+  color: black;
+  display: block;
+  transition: 0.3s cubic-bezier(0.29, 0.87, 0.7, 1.02);
+}
+.template-highlight {
+  background-color: #f54f43;
+  color: white;
+  transition: 0.3s cubic-bezier(0.29, 0.87, 0.7, 1.02);
+}

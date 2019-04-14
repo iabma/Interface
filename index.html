@@ -5,43 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>demo</title>
-    <!-- Materialize -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css" rel="stylesheet"> -->
-
-    <!-- D3 -->
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-
-    <link rel="stylesheet" href="fonts.css" />
-    <!-- <link rel="stylesheet/less" type="text/css" href="styles.less" /> -->
-    <link rel="stylesheet" href="styles.css" />
-    <!-- <script src="https://d3js.org/d3.v4.min.js"></script>
-            <script src="../js/less.js"></script>
-            <script src="../js/jquery.textfill.min.js"></script> -->
+    <title>interface</title>
 </head>
 
-<body>
-    <input id="template-search" type="text" class="noblur" placeholder="search">
-    <div id="search-type" class="dropdown noblur">
-        <button class="dropbtn">Templates</button>
-        <div class="dropdown-content">
-            <div class="search-type">Templates</div>
-            <div class="search-type">All suggestions</div>
-        </div>
-    </div>
-
-    <div id="suggestions" class="noblur"></div>
-
-    <div id="template">Use the search bar to begin.</div>
-
-    <div id="add-custom">Add template to list</div>
-
-    <div id="template-holder"></div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+<body style="overflow:hidden;background-color:white">
+    <iframe id="index" src="library.html"
+        style="border:none;position:absolute;right:0px;top:0px;height:100vh;width:50vw;display:inline-block;"></iframe>
+    <iframe src="processor.html"
+        style="border:none;position:absolute;left:0px;top:0px;height:100vh;width:50vw;display:inline-block;"></iframe>
     <script src="main.js"></script>
 </body>
 

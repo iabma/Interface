@@ -1,14 +1,19 @@
 @background-color: rgb(236, 236, 236);
-@dark: rgb(65, 65, 65);
+@dark: rgb(41, 41, 41);
 @red: #e47169;
 @main-font: "Roboto", sans-serif;
 @radius: 5px;
+
+html {
+    overflow: -moz-scrollbars-none;
+}
 
 body {
     background-color: @background-color;
     font-family: 'Roboto';
     font-size: 16px;
     -webkit-user-select: none;
+    overflow: auto;
     padding: 0px;
     margin: 0px;
     filter: blur(0px);
@@ -74,14 +79,23 @@ body {
 
 #template {
     background-color: gainsboro;
+    color: black;
+}
+
+#code {
+    background-color: @dark;
+    color: white;
+}
+
+.holder {
     border-radius: @radius;
     line-height: 30px;
-    color: black;
     margin: 15px;
     padding: 10px;
 }
 
 #search-type {
+    margin-left: 15px;
     .dropbtn {
         padding: 5px;
         background-color: @dark;
@@ -174,18 +188,11 @@ body {
     border-radius: @radius;
     color: white;
     padding: 5px;
-    margin: 5px;
+    margin: 15px;
+    width: 140px;
     font-size: 16px;
 }
 
 #add-custom:hover {
     background-color: @red;
-}
-
-::-webkit-scrollbar { 
-    display: none; 
-}
-
-::-moz-scrollbar { 
-    display: none; 
 }

@@ -1,0 +1,108 @@
+@dark: rgb(29, 29, 29);
+@light: rgb(247, 247, 247);
+@red: #e47169;
+@green: rgb(111, 233, 80);
+@background-color: @dark;
+@main-font: "Roboto", sans-serif;
+@transition-anim: cubic-bezier(.29,.87,.7,1.02);
+@radius: 7px;
+
+html {
+    overflow: -moz-scrollbars-none;
+}
+
+body {
+    background-color: @background-color;
+    font-family: 'Roboto';
+    font-size: 15px;
+    -webkit-user-select: none;
+    overflow: auto;
+    padding: 0px;
+    margin: 0px;
+    filter: blur(0px);
+    transition: .2s;
+}
+
+#close {
+    z-index: 3;
+    font-size: 18px;
+    display: none;
+    position: absolute;
+    background-color: @red;
+    color: white;
+    border-radius: @radius;
+    left: ~"calc(8vw + 16px)";
+    top: ~"calc(8vh + 16px)";
+    transition: .3s @transition-anim;
+    /* width: fit-content;
+    height: 1vh; */
+}
+
+#close:hover {
+    background-color: white;
+    color: @red;
+}
+
+#library {
+    border: none;
+    z-index: 3;
+    display: none;
+    position: absolute;
+    border-radius: @radius;
+    left: 8vw;
+    top: 8vh;
+    width: 84vw;
+    height: 84vh;
+    box-shadow: 6px;
+}
+
+#main-area {
+    display: inline-block;
+    position: absolute;
+    padding: 5px;
+    background-color: @light;
+    color: @dark;
+    border-radius: @radius;
+    left: 10vw;
+    top: 10vh;
+    width: 80vw;
+    height: 80vh;
+    box-shadow: 3px;
+    line-height: 1.4;
+}
+
+.popup {
+    position: absolute;
+    background-color: @dark;
+    padding: 3px;
+    border-radius: 3px;
+    transition: .3s @transition-anim;
+}
+
+.info {
+    border-left: 1px groove white;
+    //border-style: 
+    //border-radius: 2px;
+    margin: 2px;
+    padding: 2px;
+    padding-left: 4px;
+    display: block;
+    width: fit-content;
+    transition: .1s @transition-anim;
+}
+
+.info:hover {
+    border-left: 3px groove @red;
+}
+
+.suggest {
+    outline: none;
+    border-radius: 2px;
+    transition: .3s @transition-anim;
+    border-bottom: 2px solid @red;
+}
+
+.suggest:hover {
+    border-bottom: 2px solid @green;
+    //border-bottom: 3px dotted @green;
+}
