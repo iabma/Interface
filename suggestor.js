@@ -87,11 +87,6 @@ area.onkeydown = e => {
         e.preventDefault();
         let target = document.createTextNode("\n");
         document.getSelection().getRangeAt(0).insertNode(target);
-        /* let position = contentEditableDiv.innerHTML.indexOf("\u0001");
-        target.parentNode.removeChild(target);
-        let prev = area.innerHTML.split(position);
-        area.innerHTML = prev[0] + "<br />" + prev[1];
-        console.log(e); */
         return false;
     }
 };
